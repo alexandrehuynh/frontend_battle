@@ -14,11 +14,10 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
-    useTheme,
-    styled,
-    Switch
+    Fab
 } from '@mui/material'; 
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { getDatabase, ref, push } from 'firebase/database';
 
 
@@ -235,9 +234,10 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }
             </Typography>
           </AccordionDetails>
           </Accordion>
-          <Button variant="contained" onClick={() => onAddToTeam(pokemon)} sx={{ mt: 2 }}>
-          Add to Team
-        </Button>
+        <Fab variant="extended" size="medium" color="primary"  aria-label="add" onClick={() => onAddToTeam(pokemon)} sx={{ mt: 2 }}>
+            <GroupAddIcon sx={{ mr: 1 }} />
+            Add To Team
+        </Fab>
         </CardContent>
       </Card>
     );
