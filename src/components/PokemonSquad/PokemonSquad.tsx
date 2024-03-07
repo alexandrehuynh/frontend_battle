@@ -29,53 +29,39 @@ import { PokedexStyles } from '../Pokedex';
 import { MessageType } from '../Auth'; 
 
 
+// Type for the state array to include the firebase key
+interface PokemonWithKey extends PokemonProps {
+  firebaseKey: string;
+}
+
 export const PokemonSquad = () => {
   const db = getDatabase();
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState<string>('');
-  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
-  const [currentTeam, setCurrentTeam] = useState<PokemonProps[]>([]);
+  const [messageType, setMessageType] = useState<MessageType>('success');
+  const [pokemonSquad, setPokemonSquad] = useState<PokemonWithKey[]>([]); // Include the firebase key
   const userId = localStorage.getItem('uuid');
   const teamRef = ref(db, `teams/${userId}/`);
 
-useEffect(() => {
+  useEffect(() => {
     onValue(teamRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const teamList: PokemonProps[] = Object.values(data).map((item) => {
-          // Here we need to check that each property exists and is the correct type
-          // If your `PokemonProps` interface is simple, this might be straightforward
-          // If it's complex, you may need a more sophisticated method of validation
-          // For now, I'll assume a simple validation
-
-          // Example simple validation:
-          const isPokemonProps = (object: any): object is PokemonProps => {
-            // check for necessary properties and types, e.g.:
-            return 'poke_id' in object && typeof object.poke_id === 'string';
-          };
-
-          if (isPokemonProps(item)) {
-            return item;
-          } else {
-            throw new Error('Invalid data structure received from Firebase');
-          }
-        });
-        setCurrentTeam(teamList);
-      } else {
-        setCurrentTeam([]); // Handle the case where no data exists
-      }
+      const pokemonArray: PokemonWithKey[] = []; // Explicit type
+      snapshot.forEach((childSnapshot) => {
+        const firebaseKey = childSnapshot.key!;
+        const pokemonData = childSnapshot.val() as PokemonProps;
+        pokemonArray.push({ ...pokemonData, firebaseKey });
+      });
+      setPokemonSquad(pokemonArray);
     });
 
-    return () => {
-      off(teamRef);
-    };
-  }, []);
+    return () => off(teamRef);
+  }, [userId]);
 
-  const removeFromTeam = async (pokemonId: string) => {
-    const itemRef = ref(db, `teams/${userId}/${pokemonId}`);
+  const releasePokemon = async (teamItem: PokemonWithKey) => {
+    const itemRef = ref(db, `teams/${userId}/${teamItem.firebaseKey}`);
     remove(itemRef)
       .then(() => {
-        setMessage('Successfully removed Pokémon from your team');
+        setMessage(`Successfully removed ${teamItem.pokemon_name} from the team.`);
         setMessageType('success');
         setOpen(true);
       })
@@ -93,8 +79,9 @@ useEffect(() => {
         Your Pokémon Squad
       </Typography>
       <Grid container spacing={3} sx={PokedexStyles.grid}>
-        {currentTeam.map((pokemon, index) => (
-          <Grid item key={pokemon.poke_id || index} xs={12} md={4}>
+        {pokemonSquad.map((pokemon: PokemonWithKey, index: number) => ( // Explicit type
+          // Use the firebaseKey for the key instead of the poke_id
+          <Grid item key={pokemon.firebaseKey} xs={12} md={4}> 
             <Card sx={PokedexStyles.card}>
               <CardMedia
                 component="img"
@@ -130,7 +117,7 @@ useEffect(() => {
                   size="medium"
                   variant="outlined"
                   sx={PokedexStyles.button}
-                  onClick={() => removeFromTeam(pokemon.poke_id)}
+                  onClick={() => releasePokemon(pokemon)}
                 >
                   Remove from Team
                 </Button>
