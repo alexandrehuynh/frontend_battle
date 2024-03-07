@@ -122,9 +122,9 @@ export const NavBar = () => {
             onClick: () => navigate(myAuth === 'true' ? '/battle' : '/auth') 
         },
         { 
-            text: myAuth === 'true' ? 'Team' : '',
+            text: myAuth === 'true' ? 'Squad' : '',
             icon: myAuth === 'true' ? <TeamIcon /> : "",
-            onClick: myAuth === 'true' ? () => navigate('/team') : () => {} 
+            onClick: myAuth === 'true' ? () => navigate('/squad') : () => {} 
         }
     ]
 

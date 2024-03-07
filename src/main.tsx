@@ -7,7 +7,7 @@ import 'firebase/auth';
 
 
 // internal imports 
-import { Home, Auth, Pokedex, Battle, Team} from './components'; 
+import { Home, Auth, Pokedex, Battle, PokemonSquad} from './components'; 
 import './index.css'
 import { theme } from './Theme/themes';
 import { firebaseConfig } from './firebaseConfig'; 
@@ -21,7 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path='/' element={<Home title = {"Pokemon Battle"}/>} />
             <Route path='/auth' element={<Auth title = {"Trainers' Regristration"}/>} />
             <Route path='/pokedex' element={<Pokedex />} />
-            <Route path='/team' element={<Team />} />
+            <Route path='/squad' element={<PokemonSquad />} />
             <Route path='/battle' element={<Battle />} />
           </Routes>
         </Router>

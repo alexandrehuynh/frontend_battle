@@ -29,11 +29,13 @@ import { theme } from '../../Theme/themes';
 import { MessageType } from '../Auth';
 import { PokemonProps } from '../../customHooks/FetchData';
 import { MaterialUISwitch } from '../../Theme/themes';
+import wildImage from '../../assets/images/wild.jpg'; 
 
 // creating our Shop CSS style object 
 export const PokedexStyles = {
     main: {
         backgroundColor: theme.palette.secondary.main,
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5)), url(${wildImage})`,
         height: '100%',
         width: '100%',
         color: 'white',
@@ -99,6 +101,12 @@ export const PokedexStyles = {
         color: "white", // The color of the text
         marginTop: '100px' // The top margin of the text
     },
+    header: {
+        color: "white",
+        marginTop: theme.spacing(2),
+        marginLeft: theme.spacing(2),
+        // You can add more style properties as needed
+      }
 
 }
 
@@ -195,8 +203,13 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
 // PokemonCard component
 export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }) => {
     const [showShiny, setShowShiny] = useState(false);
-  
     
+    // Function to handle adding Pokemon to team
+    const handleAddToTeamClick = () => {
+    const pokemonWithShinyStatus = { ...pokemon, isShiny: showShiny };
+    onAddToTeam(pokemonWithShinyStatus);
+  };
+
     return (
       <Card sx={PokedexStyles.card}>
         <CardMedia
@@ -234,7 +247,7 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }
             </Typography>
           </AccordionDetails>
           </Accordion>
-        <Fab variant="extended" size="medium" color="primary"  aria-label="add" onClick={() => onAddToTeam(pokemon)} sx={{ mt: 2 }}>
+        <Fab variant="extended" size="medium" color="primary"  aria-label="add" onClick={handleAddToTeamClick} sx={{ mt: 2 }}>
             <GroupAddIcon sx={{ mr: 1 }} />
             Add To Team
         </Fab>
@@ -255,20 +268,24 @@ export const Pokedex = () => {
       setCapturedPokemons((prevPokemons) => [...prevPokemons, pokemon]);
     };
   
-    const handleAddToTeam = async (pokemon: PokemonProps) => {
-      const userId = localStorage.getItem('uuid');
-      const teamRef = ref(getDatabase(), `teams/${userId}/`);
-  
-      try {
-        await push(teamRef, pokemon);
-        setSnackbarMessage(`Successfully added ${pokemon.pokemon_name} to your team`);
-        setSnackbarSeverity('success');
-      } catch (error) {
-        setSnackbarMessage('Failed to add Pokémon to the team.');
-        setSnackbarSeverity('error');
-      }
-      setOpenSnackbar(true);
-    };
+    const handleAddToTeam = async (pokemon: PokemonProps & { isShiny: boolean }) => {
+        const userId = localStorage.getItem('uuid');
+        const teamRef = ref(getDatabase(), `teams/${userId}/`);
+      
+        try {
+          await push(teamRef, {
+            ...pokemon,
+            // Save the image based on the isShiny status
+            image_url: pokemon.isShiny ? pokemon.shiny_image_url : pokemon.image_url
+          });
+          setSnackbarMessage(`Successfully added ${pokemon.pokemon_name} to your team`);
+          setSnackbarSeverity('success');
+        } catch (error) {
+          setSnackbarMessage('Failed to add Pokémon to the team.');
+          setSnackbarSeverity('error');
+        }
+        setOpenSnackbar(true);
+      };
   
     return (
       <Box sx={PokedexStyles.main}>
@@ -288,9 +305,9 @@ export const Pokedex = () => {
             <Typography sx={{ color: 'white' }}>No Pokémon searched yet.</Typography>
           )}
         </Grid>
-        <Snackbar sx = {{textTransform: 'capitalize'}} open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
-          <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
-        </Snackbar>
+        <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+      <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+    </Snackbar>
       </Box>
     );
   };

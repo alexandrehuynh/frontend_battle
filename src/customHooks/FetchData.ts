@@ -25,10 +25,7 @@ export interface PokemonProps {
   date_added: string;
   user_id?: string;
   // Optional: If you want to keep sprites for additional flexibility
-  sprites?: {
-    front_default?: string;
-    front_shiny?: string;
-  };
+  isShiny: boolean;
   firebaseKey?: string; // Assuming this is for some Firebase integration
 }
   

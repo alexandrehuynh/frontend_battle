@@ -58,8 +58,8 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'isLoggedIn'
               <Button startIcon={<BattleIcon />} component={Link} to="/battles" variant='contained'>
                   Battles
               </Button>
-              <Button startIcon={<TeamIcon />} component={Link} to="/team-management" variant='contained'>
-                  Team Management
+              <Button startIcon={<TeamIcon />} component={Link} to="/squad" variant='contained'>
+                  Pokemon Squad
               </Button>
           </Stack>
       );
