@@ -19,6 +19,7 @@ import {
     Switch
 } from '@mui/material'; 
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import { getDatabase, ref, push } from 'firebase/database';
 
 
 
@@ -110,6 +111,13 @@ interface CatchPokemonFormProps {
     onPokemonCapture: (pokemon: PokemonProps) => void;
 }
 
+interface PokemonCardProps {
+    pokemon: PokemonProps;
+    onAddToTeam: (pokemon: PokemonProps) => void;
+  }
+  
+
+// CatchPokemonForm component
 export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCapture }) => {
     const [pokemonName, setPokemonName] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -130,7 +138,7 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
             console.log('Fetched data:', data); // Check the fetched data structure
             if (response.ok) {
                 // Assuming the actual Pokemon data is in the `data.pokemon` property
-                setSnackbarMessage('Pokémon caught successfully!');
+                setSnackbarMessage('Pokémon Found successfully!');
                 setAlertSeverity('success');
                 if (data.pokemon) {  // Make sure the `pokemon` key exists in the response
                     console.log('Data to capture:', data.pokemon); // This should be the actual Pokémon data
@@ -139,7 +147,7 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
                     console.error('Pokemon data is missing in the response');
                 }
             } else {
-                setSnackbarMessage('Failed to catch Pokémon. Try again!');
+                setSnackbarMessage('Failed to find Pokémon. Try again!');
                 setAlertSeverity('error');
             }
         } catch (error) {
@@ -185,10 +193,11 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
       );
     };
 
-
-const PokemonCard = ({ pokemon }: { pokemon: PokemonProps }) => {
+// PokemonCard component
+export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }) => {
     const [showShiny, setShowShiny] = useState(false);
   
+    
     return (
       <Card sx={PokedexStyles.card}>
         <CardMedia
@@ -226,16 +235,39 @@ const PokemonCard = ({ pokemon }: { pokemon: PokemonProps }) => {
             </Typography>
           </AccordionDetails>
           </Accordion>
+          <Button variant="contained" onClick={() => onAddToTeam(pokemon)} sx={{ mt: 2 }}>
+          Add to Team
+        </Button>
         </CardContent>
       </Card>
     );
   };
   
-  export const Pokedex = () => {
+  
+// Pokedex component
+export const Pokedex = () => {
     const [capturedPokemons, setCapturedPokemons] = useState<PokemonProps[]>([]);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   
     const handlePokemonCapture = (pokemon: PokemonProps) => {
       setCapturedPokemons((prevPokemons) => [...prevPokemons, pokemon]);
+    };
+  
+    const handleAddToTeam = async (pokemon: PokemonProps) => {
+      const userId = localStorage.getItem('uuid');
+      const teamRef = ref(getDatabase(), `teams/${userId}/`);
+  
+      try {
+        await push(teamRef, pokemon);
+        setSnackbarMessage(`Successfully added ${pokemon.pokemon_name} to your team`);
+        setSnackbarSeverity('success');
+      } catch (error) {
+        setSnackbarMessage('Failed to add Pokémon to the team.');
+        setSnackbarSeverity('error');
+      }
+      setOpenSnackbar(true);
     };
   
     return (
@@ -249,13 +281,16 @@ const PokemonCard = ({ pokemon }: { pokemon: PokemonProps }) => {
           {capturedPokemons.length > 0 ? (
             capturedPokemons.map((pokemon, index) => (
               <Grid item xs={12} sm={6} md={4} key={pokemon.poke_id || index}>
-                <PokemonCard pokemon={pokemon} />
+                <PokemonCard pokemon={pokemon} onAddToTeam={handleAddToTeam} />
               </Grid>
             ))
           ) : (
-            <Typography sx={{ color: 'white' }}>No Pokémon captured yet.</Typography>
+            <Typography sx={{ color: 'white' }}>No Pokémon searched yet.</Typography>
           )}
         </Grid>
+        <Snackbar sx = {{textTransform: 'capitalize'}} open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
+          <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>
+        </Snackbar>
       </Box>
     );
   };
