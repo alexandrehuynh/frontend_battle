@@ -70,10 +70,10 @@ export const PokedexStyles = {
         boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)' // Add a subtle shadow for depth
     },
     cardMedia: {
-        height: '200px', // Fixed height for consistency
-        width: '200px', // Fixed width for consistency
+        width: '100%', /* take as much width as possible, up to the container's width */
+        height: 'auto', /* scale the height automatically to maintain aspect ratio */
         margin: '10px auto', // Center image
-        border: '1px solid',
+        // border: '1px solid',
         borderColor: theme.palette.primary.main,
         borderRadius: '10px'
     },
