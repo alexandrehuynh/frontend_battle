@@ -14,7 +14,9 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
-    useTheme
+    useTheme,
+    styled,
+    Switch
 } from '@mui/material'; 
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 
@@ -26,6 +28,7 @@ import { NavBar, InputText } from '../sharedComponents';
 import { theme } from '../../Theme/themes';
 import { MessageType } from '../Auth';
 import { PokemonProps } from '../../customHooks/FetchData';
+import { MaterialUISwitch } from '../../Theme/themes';
 
 // creating our Shop CSS style object 
 export const PokedexStyles = {
@@ -92,7 +95,7 @@ export const PokedexStyles = {
         marginTop: '10px'
     },
     typography: { 
-        marginLeft: '5vw', // Controls the left margin of the text
+        marginLeft: '12.5vw', // Controls the left margin of the text
         color: "white", // The color of the text
         marginTop: '100px' // The top margin of the text
     },
@@ -157,77 +160,74 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="pokemonName">Enter Pokemon Name:</label>
-                <input
-                    id="pokemonName"
-                    type="text"
-                    value={pokemonName}
-                    onChange={(e) => setPokemonName(e.target.value)}
-                    required
-                />
-                <button type="submit">Catch Pokemon</button>
-            </form>
-            <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
-                <Alert onClose={handleCloseSnackbar} severity={alertSeverity} sx={{ width: '100%' }}>
-                    {snackbarMessage}
-                </Alert>
-            </Snackbar>
+          <Box component="form" onSubmit={handleSubmit} sx={{ ...PokedexStyles.stack, flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+            <Typography component="label" htmlFor="pokemonName" sx={{ color: 'white', mr: 1.5, fontWeight: 'bold' }}>
+              Enter Pokémon Name:
+            </Typography>
+            <input
+              id="pokemonName"
+              type="text"
+              value={pokemonName}
+              onChange={(e) => setPokemonName(e.target.value)}
+              required
+              style={{ padding: '10px', marginRight: '10px', borderRadius: '5px', border: '1px solid #ddd', width: '250px', marginBottom: '10px' }}
+            />
+            <Button type="submit" sx={{ ...PokedexStyles.button, backgroundColor: theme.palette.primary.main }}>
+              Search Pokémon
+            </Button>
+          </Box>
+          <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+            <Alert onClose={handleCloseSnackbar} severity={alertSeverity} sx={{ width: '100%' }}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
         </>
-    );
-};
-const PokemonDisplay: React.FC<{ pokemon: PokemonProps }> = ({ pokemon }) => {
+      );
+    };
+
+
+const PokemonCard = ({ pokemon }: { pokemon: PokemonProps }) => {
     const [showShiny, setShowShiny] = useState(false);
-    const theme = useTheme();
   
     return (
-      <Box sx={ PokedexStyles.main}>
-        <Card sx={PokedexStyles.card}>
-          <CardMedia
-            component="img"
-            image={showShiny ? pokemon.shiny_image_url || pokemon.image_url : pokemon.image_url}
-            alt={pokemon.pokemon_name}
-            sx={PokedexStyles.cardMedia}
+      <Card sx={PokedexStyles.card}>
+        <CardMedia
+          component="img"
+          image={showShiny ? pokemon.shiny_image_url || pokemon.image_url : pokemon.image_url}
+          alt={pokemon.pokemon_name}
+          sx={PokedexStyles.cardMedia}
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div" sx={{ color: 'white', textTransform: 'capitalize' }}>
+            {pokemon.pokemon_name}          
+            <MaterialUISwitch
+                checked={showShiny}
+                onChange={() => setShowShiny(!showShiny)}
+                name="toggleShiny"
             />
-          <CardContent sx={{ textAlign: 'center' }}>
-          <Typography variant="h5" component="div" sx={{ color: 'white', textTransform: 'capitalize' }}>
-              {pokemon.pokemon_name} (#{pokemon.pokemon_id})
+          </Typography>
+          <Typography sx={{ mb: 1.5, color: 'white' }}>
+            Pokedex #: {pokemon.pokemon_id} <br />
+            Type: {pokemon.type}<br />
+            Abilities: {pokemon.abilities}
+          </Typography>
+          <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
+          <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
+            <Typography>Stats</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+            <Typography sx={{ color: 'white'}}>
+              HP: {pokemon.hp}<br />
+              Attack: {pokemon.attack}<br />
+              Defense: {pokemon.defense}<br />
+              Special Attack: {pokemon.special_attack}<br />
+              Special Defense: {pokemon.special_defense}<br />
+              Speed: {pokemon.speed}
             </Typography>
-            <Typography sx={{ mb: 1.5, color: 'white' }}>
-              Type: {pokemon.type}<br />
-              Abilities: {pokemon.abilities}
-            </Typography>
-            <Button sx={{mb: 2}} variant="outlined" onClick={() => setShowShiny(!showShiny)}>
-              Toggle Shiny Image
-            </Button>
-            <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
-              <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
-                <Typography>Moves</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  {pokemon.moves}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
-              <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
-                <Typography>Stats</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  HP: {pokemon.hp}<br />
-                  Attack: {pokemon.attack}<br />
-                  Defense: {pokemon.defense}<br />
-                  Special Attack: {pokemon.special_attack}<br />
-                  Special Defense: {pokemon.special_defense}<br />
-                  Speed: {pokemon.speed}
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </CardContent>
-        </Card>
-      </Box>
+          </AccordionDetails>
+          </Accordion>
+        </CardContent>
+      </Card>
     );
   };
   
@@ -235,21 +235,21 @@ const PokemonDisplay: React.FC<{ pokemon: PokemonProps }> = ({ pokemon }) => {
     const [capturedPokemons, setCapturedPokemons] = useState<PokemonProps[]>([]);
   
     const handlePokemonCapture = (pokemon: PokemonProps) => {
-      setCapturedPokemons(prevPokemons => [...prevPokemons, pokemon]);
+      setCapturedPokemons((prevPokemons) => [...prevPokemons, pokemon]);
     };
   
     return (
       <Box sx={PokedexStyles.main}>
         <NavBar />
-        <Typography variant='h4' sx={PokedexStyles.typography}>
+        <Typography variant="h4" sx={PokedexStyles.typography}>
           Pokedex
         </Typography>
         <CatchPokemonForm onPokemonCapture={handlePokemonCapture} />
-        <Grid container spacing={2} sx={{ padding: 2 }}>
+        <Grid container spacing={2} sx={PokedexStyles.grid}>
           {capturedPokemons.length > 0 ? (
             capturedPokemons.map((pokemon, index) => (
               <Grid item xs={12} sm={6} md={4} key={pokemon.poke_id || index}>
-                <PokemonDisplay pokemon={pokemon} />
+                <PokemonCard pokemon={pokemon} />
               </Grid>
             ))
           ) : (
