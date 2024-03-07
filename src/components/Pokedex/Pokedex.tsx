@@ -14,9 +14,10 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
-    Fab
+    Fab,
+    Link
 } from '@mui/material'; 
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonTwoTone';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { getDatabase, ref, push } from 'firebase/database';
 
@@ -82,7 +83,7 @@ export const PokedexStyles = {
         borderRadius: '50px',
         height: '45px',
         width: '250px',
-        marginTop: '10px'
+        marginTop: '20px'
     },
     stack: {
         width: '75%', 
@@ -175,8 +176,8 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
 
     return (
         <>
-          <Box component="form" onSubmit={handleSubmit} sx={{ ...PokedexStyles.stack, flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-            <Typography component="label" htmlFor="pokemonName" sx={{ color: 'white', mr: 1.5, fontWeight: 'bold' }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ ...PokedexStyles.stack, flexDirection: 'row', alignItems: 'flex-end', gap: 2 }}>
+            <Typography component="label" htmlFor="pokemonName" sx={{ color: 'white', paddingTop: '10px',fontSize: '1rem', mr: 1.5, fontWeight: 'bold' }}>
               Enter Pokémon Name:
             </Typography>
             <input
@@ -187,11 +188,11 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
               required
               style={{ padding: '10px', marginRight: '10px', borderRadius: '5px', border: '1px solid #ddd', width: '250px', marginBottom: '10px' }}
             />
-            <Button type="submit" sx={{ ...PokedexStyles.button, backgroundColor: theme.palette.primary.main }}>
+            <Button type="submit" sx={{ ...PokedexStyles.button, backgroundColor: theme.palette.primary.main, width: '200px', height: '40px' }}>
               Search Pokémon
             </Button>
           </Box>
-          <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+          <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={handleCloseSnackbar}>
             <Alert onClose={handleCloseSnackbar} severity={alertSeverity} sx={{ width: '100%' }}>
               {snackbarMessage}
             </Alert>
@@ -255,15 +256,16 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }
       </Card>
     );
   };
-  
-  
+
+
 // Pokedex component
 export const Pokedex = () => {
     const [capturedPokemons, setCapturedPokemons] = useState<PokemonProps[]>([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
-  
+    const pokedexLink = "https://www.pokemon.com/us/pokedex/";
+
     const handlePokemonCapture = (pokemon: PokemonProps) => {
       setCapturedPokemons((prevPokemons) => [...prevPokemons, pokemon]);
     };
@@ -291,7 +293,13 @@ export const Pokedex = () => {
       <Box sx={PokedexStyles.main}>
         <NavBar />
         <Typography variant="h4" sx={PokedexStyles.typography}>
-          Pokedex
+          Pokedex 
+        <Link href={pokedexLink}
+            target="_blank" rel="noopener" // for security
+            sx={{ color: 'maroon', textDecoration: 'none', ml: 2, 
+                fontSize: '1rem', fontWeight: 'bold', '&:hover': { textDecoration: 'underline' } }}>
+          need help finding one?
+        </Link>
         </Typography>
         <CatchPokemonForm onPokemonCapture={handlePokemonCapture} />
         <Grid container spacing={2} sx={PokedexStyles.grid}>
@@ -301,9 +309,9 @@ export const Pokedex = () => {
                 <PokemonCard pokemon={pokemon} onAddToTeam={handleAddToTeam} />
               </Grid>
             ))
-          ) : (
-            <Typography sx={{ color: 'white' }}>No Pokémon searched yet.</Typography>
-          )}
+          ) : 
+          (<Typography sx={{ color: 'white' }}>The World Awaits... patiently</Typography>)
+          }
         </Grid>
         <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>
       <Alert severity={snackbarSeverity}>{snackbarMessage}</Alert>

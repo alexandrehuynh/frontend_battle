@@ -19,7 +19,8 @@ import {
     Alert } from '@mui/material'; 
 import InfoIcon from '@mui/icons-material/Info';
 import { getDatabase, ref, onValue, off, remove, update } from 'firebase/database';
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonRounded';
+import HistoryEduTwoToneIcon from '@mui/icons-material/HistoryEduTwoTone';
 
 // internal imports
 import { NavBar } from '../sharedComponents';
@@ -119,7 +120,7 @@ export const PokemonSquad = () => {
                   sx={PokedexStyles.button}
                   onClick={() => releasePokemon(pokemon)}
                 >
-                  Remove from Team
+                   <Typography sx = {{fontSize: '.90rem'}}>This Concludes Your Chapter With Me</Typography>
                 </Button>
               </CardContent>
             </Card>
