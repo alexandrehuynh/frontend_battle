@@ -5,7 +5,17 @@ import {
     Box,
     Typography,
     Snackbar,
-    Alert} from '@mui/material'; 
+    Alert,
+    Grid,
+    Card,
+    CardMedia,
+    CardContent,
+    Button,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    useTheme
+} from '@mui/material'; 
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 
 
@@ -166,53 +176,86 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
         </>
     );
 };
-
-const PokemonDisplay: React.FC<PokedexProps> = ({ pokemon }) => {
+const PokemonDisplay: React.FC<{ pokemon: PokemonProps }> = ({ pokemon }) => {
     const [showShiny, setShowShiny] = useState(false);
-    const toggleShiny = () => setShowShiny(!showShiny);
-    
-
+    const theme = useTheme();
+  
     return (
-      <div>
-        <h2>{pokemon.pokemon_name} (ID: {pokemon.pokemon_id})</h2>
-        <img 
-                src={showShiny ? pokemon.shiny_image_url || pokemon.image_url : pokemon.image_url} 
-                alt={pokemon.pokemon_name} 
+      <Box sx={ PokedexStyles.main}>
+        <Card sx={PokedexStyles.card}>
+          <CardMedia
+            component="img"
+            image={showShiny ? pokemon.shiny_image_url || pokemon.image_url : pokemon.image_url}
+            alt={pokemon.pokemon_name}
+            sx={PokedexStyles.cardMedia}
             />
-        <br />
-        <button onClick={toggleShiny}>Toggle Shiny Image</button>
-        <p>Types: {pokemon.type}</p>
-        <p>Moves: {pokemon.moves}</p>
-        <p>Abilities: {pokemon.abilities}</p>
-        <p>Hp: {pokemon.hp}</p>
-        <p>attack: {pokemon.attack}</p>
-        <p>defense: {pokemon.defense}</p>
-        <p>special_attack: {pokemon.special_attack}</p>
-        <p>special_defense: {pokemon.special_defense}</p>
-        <p>speed: {pokemon.speed}</p>
-      </div>
+          <CardContent sx={{ textAlign: 'center' }}>
+          <Typography variant="h5" component="div" sx={{ color: 'white', textTransform: 'capitalize' }}>
+              {pokemon.pokemon_name} (#{pokemon.pokemon_id})
+            </Typography>
+            <Typography sx={{ mb: 1.5, color: 'white' }}>
+              Type: {pokemon.type}<br />
+              Abilities: {pokemon.abilities}
+            </Typography>
+            <Button sx={{mb: 2}} variant="outlined" onClick={() => setShowShiny(!showShiny)}>
+              Toggle Shiny Image
+            </Button>
+            <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
+              <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
+                <Typography>Moves</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  {pokemon.moves}
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
+              <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
+                <Typography>Stats</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  HP: {pokemon.hp}<br />
+                  Attack: {pokemon.attack}<br />
+                  Defense: {pokemon.defense}<br />
+                  Special Attack: {pokemon.special_attack}<br />
+                  Special Defense: {pokemon.special_defense}<br />
+                  Speed: {pokemon.speed}
+                </Typography>
+              </AccordionDetails>
+            </Accordion>
+          </CardContent>
+        </Card>
+      </Box>
     );
   };
-
+  
   export const Pokedex = () => {
-    const [capturedPokemon, setCapturedPokemon] = useState<PokemonProps | null>(null);
-
+    const [capturedPokemons, setCapturedPokemons] = useState<PokemonProps[]>([]);
+  
     const handlePokemonCapture = (pokemon: PokemonProps) => {
-        setCapturedPokemon(pokemon);
+      setCapturedPokemons(prevPokemons => [...prevPokemons, pokemon]);
     };
-
+  
     return (
-        <Box sx={PokedexStyles.main}>
-            <NavBar />
-            <Typography variant='h4' sx={PokedexStyles.typography}>
-                Pokedex
-            </Typography>
-            <CatchPokemonForm onPokemonCapture={handlePokemonCapture} />
-            {capturedPokemon ? (
-                <PokemonDisplay pokemon={capturedPokemon} />
-            ) : (
-                <p>No Pokémon captured yet.</p>
-            )}
-        </Box>
+      <Box sx={PokedexStyles.main}>
+        <NavBar />
+        <Typography variant='h4' sx={PokedexStyles.typography}>
+          Pokedex
+        </Typography>
+        <CatchPokemonForm onPokemonCapture={handlePokemonCapture} />
+        <Grid container spacing={2} sx={{ padding: 2 }}>
+          {capturedPokemons.length > 0 ? (
+            capturedPokemons.map((pokemon, index) => (
+              <Grid item xs={12} sm={6} md={4} key={pokemon.poke_id || index}>
+                <PokemonDisplay pokemon={pokemon} />
+              </Grid>
+            ))
+          ) : (
+            <Typography sx={{ color: 'white' }}>No Pokémon captured yet.</Typography>
+          )}
+        </Grid>
+      </Box>
     );
-};
+  };
