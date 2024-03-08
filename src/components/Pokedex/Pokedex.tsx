@@ -25,13 +25,11 @@ import { getDatabase, ref, push } from 'firebase/database';
 
 // internal imports
 // import { useGetShop, PokemonProps } from '../../customHooks';
-import { NavBar, InputText } from '../sharedComponents';
+import { NavBar } from '../sharedComponents';
 import { theme } from '../../Theme/themes';
-import { MessageType } from '../Auth';
 import { PokemonProps } from '../../customHooks/FetchData';
 import { MaterialUISwitch } from '../../Theme/themes';
 import wildImage from '../../assets/images/wild.jpg'; 
-import { multiFactor } from 'firebase/auth';
 
 // creating our Shop CSS style object 
 export const PokedexStyles = {
@@ -111,10 +109,6 @@ export const PokedexStyles = {
       }
 
 }
-
-interface PokedexProps {
-    pokemon: PokemonProps; // The Pokémon data to display
-  }
 
 interface CatchPokemonFormProps {
     onPokemonCapture: (pokemon: PokemonProps) => void;

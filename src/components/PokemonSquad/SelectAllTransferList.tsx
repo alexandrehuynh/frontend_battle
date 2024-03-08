@@ -27,7 +27,7 @@ interface SelectAllTransferListProps {
   allMoves: string[];
   currentMoves: string[];
   setRight: React.Dispatch<React.SetStateAction<string[]>>;
-  onSave: (selectedMoves: string[]) => void;
+  onSave: (selectedMoves: string[]) => void; 
 }
 
 export default function SelectAllTransferList({
@@ -76,6 +76,17 @@ export default function SelectAllTransferList({
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      await onSave([...right]);  // Assuming onSave is an async operation
+      // Show success feedback to the user
+      console.log('Moves saved successfully');
+    } catch (error) {
+      // Handle any errors that occur during the save process
+      console.error('Failed to save moves:', error);
+    }
   };
 
   const customList = (title: React.ReactNode, items: readonly string[]) => (
@@ -165,6 +176,16 @@ export default function SelectAllTransferList({
         </Grid>
       </Grid>
       <Grid item>{customList('Learned Moves', right)}</Grid>
+        {/* "Save" button */}
+            <Grid item xs={12} style={{ marginTop: '20px', textAlign: 'center' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSaveClick}
+        >
+          Save
+        </Button>
+    </Grid>
     </Grid>
   );
 }
