@@ -29,6 +29,7 @@ import { signOut, getAuth } from 'firebase/auth';
 
 //internal imports
 import { theme } from '../../../Theme/themes'; 
+import { TroubleshootTwoTone, TurnedInNotOutlined } from '@mui/icons-material';
 
 
 // building a CSS object/dictionary to reference inside our html for styling
@@ -97,13 +98,9 @@ export const NavBar = () => {
 
 
     // 2 functions to help us set our hook
-    const handleDrawerOpen = () => {
-        setOpen(true)
-    }
-
-    const handleDrawerClose = () => {
-        setOpen(false)
-    }
+    const toggleDrawer = (newOpen: boolean) => () => {
+        setOpen(newOpen);
+      };
 
     // list of dictionary/object for our NavLinks
 
@@ -160,7 +157,7 @@ export const NavBar = () => {
                     <IconButton 
                         color='inherit'
                         aria-label='open drawer'
-                        onClick = { handleDrawerOpen }
+                        onClick = { toggleDrawer(true) }
                         edge='start'
                         sx = { open ? navStyles.hide : navStyles.menuButton }
                     >
@@ -189,14 +186,15 @@ export const NavBar = () => {
             <Drawer
                     sx={{
                         ...open ? navStyles.drawer : navStyles.hide,
-                        '& .MuiDrawer-paper': navStyles.drawerPaper, // Add this line
+                        '& .MuiDrawer-paper': navStyles.drawerPaper, 
                     }}
                     variant="persistent"
                     anchor="left"
                     open={open}
+                    onClose={toggleDrawer(false)}
                     >
                 <Box sx = {navStyles.drawerHeader }>
-                    <IconButton onClick={handleDrawerClose}>
+                    <IconButton onClick={toggleDrawer(false)}>
                         <SiPokemon  size="32" />
                     </IconButton>
                 </Box>

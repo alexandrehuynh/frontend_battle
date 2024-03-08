@@ -10,21 +10,17 @@ import {
     Grid,
     Box,
     Button,
-    Dialog,
-    DialogContent,
-    DialogContentText,
-    Stack,
     Typography,
     Snackbar,
     Fab,
     Alert } from '@mui/material'; 
-import InfoIcon from '@mui/icons-material/Info';
 import { getDatabase, ref, onValue, off, remove, set, update } from 'firebase/database';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonRounded';
 import HistoryEduTwoToneIcon from '@mui/icons-material/HistoryEduTwoTone';
 import { GiDropWeapon } from "react-icons/gi";
 import { GiBattleGear } from "react-icons/gi";
 // import { ReactComponent as BattleReadyIcon } from '../../assets/images/boxing-gloves.svg';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 // internal imports
 import { NavBar } from '../sharedComponents';
@@ -32,16 +28,22 @@ import { theme } from '../../Theme/themes';
 import { PokemonProps } from '../../customHooks/FetchData';
 import { PokedexStyles } from '../Pokedex';
 import { MessageType } from '../Auth'; 
-import { AddIcCallTwoTone } from '@mui/icons-material';
-
+import { EditPokemonMoves } from './EditPokemonMoves'
 
 
 
 
 // Type for the state array to include the firebase key
-interface PokemonWithKey extends PokemonProps {
+export interface PokemonWithKey extends PokemonProps {
   firebaseKey: string;
 }
+
+interface EditPokemonMovesProps {
+  pokemon: PokemonWithKey | null; // Allow for null
+  firebaseKey: string;
+  userId: string | null; // Allow for null
+}
+
 
 export const PokemonSquad = () => {
   const db = getDatabase();
@@ -50,9 +52,15 @@ export const PokemonSquad = () => {
   const [messageType, setMessageType] = useState<MessageType>('success');
   const [battleReady, setBattleReady] = useState<{ [key: string]: boolean }>({}); // Include the firebase key (team of 6)
   const [pokemonTeam, setPokemonTeam] = useState<PokemonWithKey[]>([]); // Include the firebase key (whole collection)
-  const user_id = localStorage.getItem('uuid');
+  const [selectedPokemonForEdit, setSelectedPokemonForEdit] = useState<PokemonWithKey | null>(null);    // State to control the selected Pokemon for editing moves
+  // const [isDialogOpen, setIsDialogOpen] = useState(false); // New state to control dialog visibility
+
+
+  // Retrieve user_id from localStorage and ensure it is not null
+  const user_id = localStorage.getItem('uuid') || 'default_user_id'; // Provide a default value or handle it accordingly
   const teamRef = ref(db, `world/${user_id}/team/`);
-  
+
+
   useEffect(() => {
     onValue(teamRef, (snapshot) => {
       const pokemonArray: PokemonWithKey[] = [];
@@ -111,8 +119,7 @@ export const PokemonSquad = () => {
     // Update Firebase with the new status (assuming you have a 'battleReady' field in Firebase)
     const pokemonRef = ref(db, `world/${user_id}/team/${pokemon.firebaseKey}`);
     await update(pokemonRef, { battleReady: !battleReady[pokemon.firebaseKey] });
-  };
-
+    };
 
   return (
     <Box sx={PokedexStyles.main}>
@@ -136,7 +143,7 @@ export const PokemonSquad = () => {
                     size="small"
                     sx={{
                       position: 'absolute',
-                      top: theme.spacing(2), // Adjust this value to move the FAB from the bottom of the card
+                      top: theme.spacing(2), // Adjust this value to move the FAB from the top of the card
                       right: theme.spacing(2),  // Adjust this value to move the FAB from the right edge of the card
                     }}
                     aria-label="add"
@@ -151,7 +158,7 @@ export const PokemonSquad = () => {
                     {battleReady[pokemon.firebaseKey] && (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <GiBattleGear style={{ fontSize: '24px', marginLeft: '1rem', marginRight: '0.25rem', color: "#bc5c2c" }} />
-                        <span style={{ fontSize: '12px', color: "#bc5c2c"}}>Battle Ready!</span>
+                        <span style={{ fontSize: '11.5px', color: "#bc5c2c"}}>Battle <br/> Ready!</span>
                       </div>
 )}                  </h3>
                 </Typography>
@@ -175,6 +182,26 @@ export const PokemonSquad = () => {
                   </Typography>
                 </AccordionDetails>
                 </Accordion>
+                <div className="moves-section">
+                <Accordion sx={{ color: '#f5f5dc', backgroundColor: theme.palette.secondary.light }}>
+                <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
+                  <Typography>Moves</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography sx={{ color: '#f5f5dc' }}>
+                      {pokemon.moves}<br />
+                    </Typography>
+                    
+                {/* Ensure EditPokemonMoves is rendered with the current iterated pokemon */}
+                <EditPokemonMoves
+                  pokemon={pokemon}
+                  firebaseKey={pokemon.firebaseKey}
+                  user_id={user_id} // pass the non-null user_id
+                />
+
+                  </AccordionDetails>
+                </Accordion>
+                </div>
                 <Button
                   size="medium"
                   variant="outlined"
