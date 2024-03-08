@@ -41,7 +41,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'isLoggedIn'
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    color: 'white'
+    color: '#f5f5dc'
   });
   
   // This is our first functional based component!

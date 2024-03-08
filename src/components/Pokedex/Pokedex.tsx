@@ -40,7 +40,7 @@ export const PokedexStyles = {
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5)), url(${wildImage})`,
         height: '100%',
         width: '100%',
-        color: 'white',
+        color: '#f5f5dc',
         backgroundSize: 'cover',
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
@@ -80,7 +80,7 @@ export const PokedexStyles = {
         borderRadius: '10px'
     },
     button: {
-        color: 'white', 
+        color: '#f5f5dc', 
         borderRadius: '50px',
         height: '45px',
         width: '250px',
@@ -100,11 +100,11 @@ export const PokedexStyles = {
     },
     typography: { 
         marginLeft: '12.5vw', // Controls the left margin of the text
-        color: "white", // The color of the text
+        color: "#f5f5dc", // The color of the text
         marginTop: '100px' // The top margin of the text
     },
     header: {
-        color: "white",
+        color: "#f5f5dc",
         marginTop: theme.spacing(2),
         marginLeft: theme.spacing(2),
         // You can add more style properties as needed
@@ -178,7 +178,7 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
     return (
         <>
           <Box component="form" onSubmit={handleSubmit} sx={{ ...PokedexStyles.stack, flexDirection: 'row', alignItems: 'flex-end', gap: 2 }}>
-            <Typography component="label" htmlFor="pokemonName" sx={{ color: 'white', paddingTop: '10px',fontSize: '1rem', mr: 1.5, fontWeight: 'bold' }}>
+            <Typography component="label" htmlFor="pokemonName" sx={{ color: '#f5f5dc', paddingTop: '10px',fontSize: '1rem', mr: 1.5, fontWeight: 'bold' }}>
               Enter Pokémon Name:
             </Typography>
             <input
@@ -221,7 +221,7 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }
           sx={PokedexStyles.cardMedia}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div" sx={{ color: 'white', textTransform: 'capitalize' }}>
+          <Typography gutterBottom variant="h5" component="div" sx={{ color: '#f5f5dc', textTransform: 'capitalize' }}>
             {pokemon.pokemon_name}          
             <MaterialUISwitch
                 checked={showShiny}
@@ -229,17 +229,17 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon, onAddToTeam }
                 name="toggleShiny"
             />
           </Typography>
-          <Typography sx={{ mb: 1.5, color: 'white' }}>
+          <Typography sx={{ mb: 1.5, color: '#f5f5dc' }}>
             Pokedex #: {pokemon.pokemon_id} <br />
             Type: {pokemon.type}<br />
             Abilities: {pokemon.abilities}
           </Typography>
-          <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
+          <Accordion sx={{ color: '#f5f5dc', backgroundColor: theme.palette.secondary.light }}>
           <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
             <Typography>Stats</Typography>
             </AccordionSummary>
             <AccordionDetails>
-            <Typography sx={{ color: 'white'}}>
+            <Typography sx={{ color: '#f5f5dc'}}>
               HP: {pokemon.hp}<br />
               Attack: {pokemon.attack}<br />
               Defense: {pokemon.defense}<br />
@@ -311,7 +311,7 @@ export const Pokedex = () => {
               </Grid>
             ))
           ) : 
-          (<Typography sx={{ color: 'white' }}>The World Awaits... patiently</Typography>)
+          (<Typography sx={{ color: '#f5f5dc' }}>The World Awaits... patiently</Typography>)
           }
         </Grid>
         <Snackbar open={openSnackbar} autoHideDuration={3000} onClose={() => setOpenSnackbar(false)}>

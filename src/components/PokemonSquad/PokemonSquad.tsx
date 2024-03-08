@@ -22,8 +22,9 @@ import InfoIcon from '@mui/icons-material/Info';
 import { getDatabase, ref, onValue, off, remove, set, update } from 'firebase/database';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonRounded';
 import HistoryEduTwoToneIcon from '@mui/icons-material/HistoryEduTwoTone';
-import { AiOutlineUsergroupAdd } from "react-icons/ai";
-import { AiOutlineUsergroupDelete } from "react-icons/ai";
+import { GiDropWeapon } from "react-icons/gi";
+import { GiBattleGear } from "react-icons/gi";
+// import { ReactComponent as BattleReadyIcon } from '../../assets/images/boxing-gloves.svg';
 
 // internal imports
 import { NavBar } from '../sharedComponents';
@@ -32,7 +33,7 @@ import { PokemonProps } from '../../customHooks/FetchData';
 import { PokedexStyles } from '../Pokedex';
 import { MessageType } from '../Auth'; 
 import { AddIcCallTwoTone } from '@mui/icons-material';
-// import { ReactComponent as BoxingGlovesIcon } from '../../assets/images/boxing-gloves.svg';
+
 
 
 
@@ -141,26 +142,30 @@ export const PokemonSquad = () => {
                     aria-label="add"
                     onClick={() => toggleBattleStatus(pokemon)}
                   >
-                      {battleReady[pokemon.firebaseKey] ? <AiOutlineUsergroupDelete size = '21' /> : <AiOutlineUsergroupAdd size = '21' />} 
+                      {battleReady[pokemon.firebaseKey] ? <GiDropWeapon size = '21' /> : <GiBattleGear size = '21' />} 
                 </Fab>
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div" sx={{ color: 'white', textTransform: 'capitalize' }}>
-                  <h2 style={{ display: 'flex', alignItems: 'center' }}>
+                <Typography gutterBottom variant="h5" component="div" sx={{ color: '#f5f5dc', textTransform: 'capitalize' }}>
+                  <h3 style={{ display: 'flex', alignItems: 'center' }}>
                     {pokemon.pokemon_name}   
-                    {battleReady[pokemon.firebaseKey] && <AiOutlineUsergroupAdd style={{ marginLeft: '0.5rem' }} />}
-                  </h2>
+                    {battleReady[pokemon.firebaseKey] && (
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <GiBattleGear style={{ fontSize: '24px', marginLeft: '1rem', marginRight: '0.25rem', color: "#bc5c2c" }} />
+                        <span style={{ fontSize: '12px', color: "#bc5c2c"}}>Battle Ready!</span>
+                      </div>
+)}                  </h3>
                 </Typography>
-                <Typography sx={{ mb: 1.5, color: 'white' }}>
+                <Typography sx={{ mb: 1.5, color: '#f5f5dc' }}>
                   Pokedex #: {pokemon.pokemon_id} <br />
                   Type: {pokemon.type}<br />
                   Abilities: {pokemon.abilities}
                 </Typography>
-                <Accordion sx={{ color: 'white', backgroundColor: theme.palette.secondary.light }}>
+                <Accordion sx={{ color: '#f5f5dc', backgroundColor: theme.palette.secondary.light }}>
                 <AccordionSummary expandIcon={<CatchingPokemonIcon />}>
                   <Typography>Stats</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                  <Typography sx={{ color: 'white'}}>
+                  <Typography sx={{ color: '#f5f5dc'}}>
                     HP: {pokemon.hp}<br />
                     Attack: {pokemon.attack}<br />
                     Defense: {pokemon.defense}<br />
@@ -176,7 +181,7 @@ export const PokemonSquad = () => {
                   sx={PokedexStyles.button}
                   onClick={() => releasePokemon(pokemon)}
                 >
-                   <Typography sx = {{fontSize: '.90rem'}}>This Concludes Your Chapter With Me</Typography>
+                   <Typography sx = {{fontSize: '.90rem'}}>Honorable Discharge</Typography>
                 </Button>
 
               </CardContent>

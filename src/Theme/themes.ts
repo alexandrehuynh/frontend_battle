@@ -39,7 +39,7 @@ export const authStyles = {
         marginTop: '100px',
         marginRight: 'auto', //used a lot to center your div
         marginLeft: 'auto',
-        color: 'white'
+        color: '#f5f5dc'
     },
     button: {
         width: '175px',

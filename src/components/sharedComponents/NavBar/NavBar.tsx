@@ -18,9 +18,11 @@ import {
 import { useNavigate } from 'react-router-dom'; 
 import { SiPokemon } from "react-icons/si";
 import PokedexIcon from '@mui/icons-material/TravelExplore';
-import BattleIcon from '@mui/icons-material/SportsKabaddi';
-import TeamIcon from '@mui/icons-material/Groups3';
-import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
+// import BattleIcon from '@mui/icons-material/SportsKabaddi';
+import { GiNinjaHeroicStance } from "react-icons/gi";
+import { RiTeamFill } from "react-icons/ri";
+// import TeamIcon from '@mui/icons-material/Groups3';
+import { GiFamilyHouse } from "react-icons/gi";
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { signOut, getAuth } from 'firebase/auth'; 
 
@@ -108,7 +110,7 @@ export const NavBar = () => {
     const navLinks = [
         {
             text: 'Home',
-            icon: <SelfImprovementIcon/>,
+            icon: <GiFamilyHouse size = '26'/>,
             onClick: () => navigate('/')
         },
         { 
@@ -118,12 +120,12 @@ export const NavBar = () => {
         },
         { 
             text: myAuth === 'true' ? 'Battle' : 'Sign In',
-            icon: myAuth === 'true' ? <BattleIcon /> : <FingerprintIcon />,
+            icon: myAuth === 'true' ? <GiNinjaHeroicStance  size ='26' /> : <FingerprintIcon />,
             onClick: () => navigate(myAuth === 'true' ? '/battle' : '/auth') 
         },
         { 
             text: myAuth === 'true' ? 'Squad' : '',
-            icon: myAuth === 'true' ? <TeamIcon /> : "",
+            icon: myAuth === 'true' ? <RiTeamFill size='26' /> : "",
             onClick: myAuth === 'true' ? () => navigate('/squad') : () => {} 
         }
     ]

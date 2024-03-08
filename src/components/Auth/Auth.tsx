@@ -345,7 +345,7 @@ export const Auth = (props:Props) => {
             <NavBar />
             <Box sx={ authStyles.main}>
                 <Stack direction = 'column' alignItems = 'center' textAlign = 'center' sx={authStyles.stack}>
-                    <Typography variant='h2' sx={{color: 'white'}}>
+                    <Typography variant='h2' sx={{color: '#f5f5dc'}}>
                         {props.title}
                     </Typography>
                     <br />
@@ -361,7 +361,7 @@ export const Auth = (props:Props) => {
                         <GoogleButton open={open} onClick={() => setOpen(false)} />
                         <FacebookButton  open={open} onClick={() => setOpen(false)} />
                     </Stack>
-                    <Divider variant = 'fullWidth' color = 'white' />
+                    <Divider variant = 'fullWidth' color = '#f5f5dc' />
                     <br />
                     <Stack 
                         width = '100%'
