@@ -36,8 +36,15 @@ export default function SelectAllTransferList({
   onSave,
 }: SelectAllTransferListProps) {
   const [checked, setChecked] = React.useState<readonly string[]>([]);
-  const [left, setLeft] = React.useState<readonly string[]>(not(allMoves, currentMoves));
-  const [right, setRight] = React.useState<readonly string[]>(currentMoves);
+  const [left, setLeft] = React.useState<readonly string[]>([]);
+  const [right, setRight] = React.useState<readonly string[]>([]);
+
+   // Use effect to update 'left' and 'right' whenever props change
+  React.useEffect(() => {
+    setLeft(not(allMoves, currentMoves));
+    setRight(currentMoves);
+  }, [allMoves, currentMoves]);
+
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -53,6 +60,13 @@ export default function SelectAllTransferList({
     }
 
     setChecked(newChecked);
+
+        // Use effect to update 'left' and 'right' whenever props change
+        React.useEffect(() => {
+          setLeft(not(allMoves, currentMoves));
+          setRight(currentMoves);
+        }, [allMoves, currentMoves]);
+      
   };
 
   const numberOfChecked = (items: readonly string[]) =>
@@ -64,18 +78,36 @@ export default function SelectAllTransferList({
     } else {
       setChecked(union(checked, items));
     }
+    // Use effect to update 'left' and 'right' whenever props change
+    React.useEffect(() => {
+    setLeft(not(allMoves, currentMoves));
+    setRight(currentMoves);
+    }, [allMoves, currentMoves]);
+      
   };
 
   const handleCheckedRight = () => {
     setRight(right.concat(leftChecked));
     setLeft(not(left, leftChecked));
     setChecked(not(checked, leftChecked));
+  // Use effect to update 'left' and 'right' whenever props change
+  React.useEffect(() => {
+    setLeft(not(allMoves, currentMoves));
+    setRight(currentMoves);
+  }, [allMoves, currentMoves]);
+
   };
 
   const handleCheckedLeft = () => {
     setLeft(left.concat(rightChecked));
     setRight(not(right, rightChecked));
     setChecked(not(checked, rightChecked));
+    // Use effect to update 'left' and 'right' whenever props change
+    React.useEffect(() => {
+    setLeft(not(allMoves, currentMoves));
+    setRight(currentMoves);
+  }, [allMoves, currentMoves]);
+
   };
 
   const handleSaveClick = async () => {
@@ -87,6 +119,12 @@ export default function SelectAllTransferList({
       // Handle any errors that occur during the save process
       console.error('Failed to save moves:', error);
     }
+    // Use effect to update 'left' and 'right' whenever props change
+    React.useEffect(() => {
+      setLeft(not(allMoves, currentMoves));
+      setRight(currentMoves);
+    }, [allMoves, currentMoves]);
+      
   };
 
   const customList = (title: React.ReactNode, items: readonly string[]) => (

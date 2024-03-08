@@ -18,6 +18,7 @@ import {
 import { useNavigate } from 'react-router-dom'; 
 import { SiPokemon } from "react-icons/si";
 import PokedexIcon from '@mui/icons-material/TravelExplore';
+// import PokedexIcon from '../../../../dist/pikachu.png';
 // import BattleIcon from '@mui/icons-material/SportsKabaddi';
 import { GiNinjaHeroicStance } from "react-icons/gi";
 import { RiTeamFill } from "react-icons/ri";
