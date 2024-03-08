@@ -16,14 +16,13 @@ import {
     Box //this is just a div 
 } from '@mui/material'; 
 import { useNavigate } from 'react-router-dom'; 
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import { SiPokemon } from "react-icons/si";
 import PokedexIcon from '@mui/icons-material/TravelExplore';
 import BattleIcon from '@mui/icons-material/SportsKabaddi';
 import TeamIcon from '@mui/icons-material/Groups3';
 import SelfImprovementIcon from '@mui/icons-material/SelfImprovement';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { signOut, getAuth } from 'firebase/auth'; 
-
 
 
 //internal imports
@@ -163,7 +162,7 @@ export const NavBar = () => {
                         edge='start'
                         sx = { open ? navStyles.hide : navStyles.menuButton }
                     >
-                        <CatchingPokemonIcon sx={{ transform: 'rotate(180deg)'}} />
+                        <SiPokemon size="50" />
                     </IconButton>
                 </Toolbar>
                 <Stack 
@@ -196,7 +195,7 @@ export const NavBar = () => {
                     >
                 <Box sx = {navStyles.drawerHeader }>
                     <IconButton onClick={handleDrawerClose}>
-                        <CatchingPokemonIcon sx={{ transform: 'rotate(180deg)'}} />
+                        <SiPokemon  size="32" />
                     </IconButton>
                 </Box>
                 <Divider />

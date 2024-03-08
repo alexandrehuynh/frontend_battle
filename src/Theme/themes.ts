@@ -21,7 +21,6 @@ export const theme = createTheme({
     }
 })
 
-
 // creating our dictionary/object for our css styling 
 
 export const authStyles = {

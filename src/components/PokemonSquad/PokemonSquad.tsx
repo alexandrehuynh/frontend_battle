@@ -16,12 +16,14 @@ import {
     Stack,
     Typography,
     Snackbar,
-    Chip,
+    Fab,
     Alert } from '@mui/material'; 
 import InfoIcon from '@mui/icons-material/Info';
 import { getDatabase, ref, onValue, off, remove, set, update } from 'firebase/database';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonRounded';
 import HistoryEduTwoToneIcon from '@mui/icons-material/HistoryEduTwoTone';
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { AiOutlineUsergroupDelete } from "react-icons/ai";
 
 // internal imports
 import { NavBar } from '../sharedComponents';
@@ -29,6 +31,10 @@ import { theme } from '../../Theme/themes';
 import { PokemonProps } from '../../customHooks/FetchData';
 import { PokedexStyles } from '../Pokedex';
 import { MessageType } from '../Auth'; 
+import { AddIcCallTwoTone } from '@mui/icons-material';
+// import { ReactComponent as BoxingGlovesIcon } from '../../assets/images/boxing-gloves.svg';
+
+
 
 
 // Type for the state array to include the firebase key
@@ -45,21 +51,25 @@ export const PokemonSquad = () => {
   const [pokemonTeam, setPokemonTeam] = useState<PokemonWithKey[]>([]); // Include the firebase key (whole collection)
   const user_id = localStorage.getItem('uuid');
   const teamRef = ref(db, `world/${user_id}/team/`);
-
+  
   useEffect(() => {
     onValue(teamRef, (snapshot) => {
-      const pokemonArray: PokemonWithKey[] = []; // Explicit type
+      const pokemonArray: PokemonWithKey[] = [];
+      const newBattleReadyState: { [key: string]: boolean } = {};
       snapshot.forEach((childSnapshot) => {
         const firebaseKey = childSnapshot.key!;
         const pokemonData = childSnapshot.val() as PokemonProps;
         pokemonArray.push({ ...pokemonData, firebaseKey });
+  
+        // Initialize the battle ready state based on the firebase data
+        newBattleReadyState[firebaseKey] = !!pokemonData.battleReady;
       });
       setPokemonTeam(pokemonArray);
+      setBattleReady(newBattleReadyState); // Set the battleReady state with data from Firebase
     });
-
+  
     return () => off(teamRef);
   }, [user_id]);
-
 
   const releasePokemon = async (teamItem: PokemonWithKey) => {
     const itemRef = ref(db, `world/${user_id}/team/${teamItem.firebaseKey}/`);
@@ -113,16 +123,32 @@ export const PokemonSquad = () => {
         {pokemonTeam.map((pokemon: PokemonWithKey, index: number) => ( // Explicit type
           // Use the firebaseKey for the key instead of the poke_id
           <Grid item key={pokemon.firebaseKey} xs={12} md={4}> 
-            <Card sx={PokedexStyles.card}>
+            <Card sx={{...PokedexStyles.card, position: 'relative'}}>
               <CardMedia
                 component="img"
                 image={pokemon.image_url}
                 alt={pokemon.pokemon_name}
                 sx={PokedexStyles.cardMedia}
               />
+                <Fab
+                    color="primary"
+                    size="small"
+                    sx={{
+                      position: 'absolute',
+                      top: theme.spacing(2), // Adjust this value to move the FAB from the bottom of the card
+                      right: theme.spacing(2),  // Adjust this value to move the FAB from the right edge of the card
+                    }}
+                    aria-label="add"
+                    onClick={() => toggleBattleStatus(pokemon)}
+                  >
+                      {battleReady[pokemon.firebaseKey] ? <AiOutlineUsergroupDelete size = '21' /> : <AiOutlineUsergroupAdd size = '21' />} 
+                </Fab>
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div" sx={{ color: 'white', textTransform: 'capitalize' }}>
-                  {pokemon.pokemon_name}          
+                  <h2 style={{ display: 'flex', alignItems: 'center' }}>
+                    {pokemon.pokemon_name}   
+                    {battleReady[pokemon.firebaseKey] && <AiOutlineUsergroupAdd style={{ marginLeft: '0.5rem' }} />}
+                  </h2>
                 </Typography>
                 <Typography sx={{ mb: 1.5, color: 'white' }}>
                   Pokedex #: {pokemon.pokemon_id} <br />
@@ -152,23 +178,7 @@ export const PokemonSquad = () => {
                 >
                    <Typography sx = {{fontSize: '.90rem'}}>This Concludes Your Chapter With Me</Typography>
                 </Button>
-                <Button
-                size="medium"
-                variant="outlined"
-                sx={PokedexStyles.button}
-                onClick={() => toggleBattleStatus(pokemon)}
-              >
-                Reporting for Duty!
-              </Button>
-              {battleReady[pokemon.firebaseKey] && (
-                <Chip
-                  icon={<CatchingPokemonIcon />}
-                  label="Battle Ready"
-                  color="success"
-                  size="small"
-                  sx={{ position: 'absolute', top: 0, right: 0 }}
-                />
-              )}
+
               </CardContent>
             </Card>
           </Grid>
