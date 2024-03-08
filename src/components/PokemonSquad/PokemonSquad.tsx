@@ -14,13 +14,11 @@ import {
     Snackbar,
     Fab,
     Alert } from '@mui/material'; 
-import { getDatabase, ref, onValue, off, remove, set, update } from 'firebase/database';
+import { getDatabase, ref, onValue, off, remove, update } from 'firebase/database';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonRounded';
-import HistoryEduTwoToneIcon from '@mui/icons-material/HistoryEduTwoTone';
 import { GiDropWeapon } from "react-icons/gi";
 import { GiBattleGear } from "react-icons/gi";
 // import { ReactComponent as BattleReadyIcon } from '../../assets/images/boxing-gloves.svg';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 // internal imports
 import { NavBar } from '../sharedComponents';
@@ -38,11 +36,11 @@ export interface PokemonWithKey extends PokemonProps {
   firebaseKey: string;
 }
 
-interface EditPokemonMovesProps {
-  pokemon: PokemonWithKey | null; // Allow for null
-  firebaseKey: string;
-  userId: string | null; // Allow for null
-}
+// interface EditPokemonMovesProps {
+//   pokemon: PokemonWithKey | null; // Allow for null
+//   firebaseKey: string;
+//   userId: string | null; // Allow for null
+// }
 
 
 export const PokemonSquad = () => {
@@ -52,7 +50,7 @@ export const PokemonSquad = () => {
   const [messageType, setMessageType] = useState<MessageType>('success');
   const [battleReady, setBattleReady] = useState<{ [key: string]: boolean }>({}); // Include the firebase key (team of 6)
   const [pokemonTeam, setPokemonTeam] = useState<PokemonWithKey[]>([]); // Include the firebase key (whole collection)
-  const [selectedPokemonForEdit, setSelectedPokemonForEdit] = useState<PokemonWithKey | null>(null);    // State to control the selected Pokemon for editing moves
+  // const [selectedPokemonForEdit, setSelectedPokemonForEdit] = useState<PokemonWithKey | null>(null);    // State to control the selected Pokemon for editing moves
   // const [isDialogOpen, setIsDialogOpen] = useState(false); // New state to control dialog visibility
 
 
@@ -128,7 +126,7 @@ export const PokemonSquad = () => {
         Your Pokémon Squad
       </Typography>
       <Grid container spacing={3} sx={PokedexStyles.grid}>
-        {pokemonTeam.map((pokemon: PokemonWithKey, index: number) => ( // Explicit type
+        {pokemonTeam.map((pokemon: PokemonWithKey, _index: number) => ( // Explicit type
           // Use the firebaseKey for the key instead of the poke_id
           <Grid item key={pokemon.firebaseKey} xs={12} md={4}> 
             <Card sx={{...PokedexStyles.card, position: 'relative'}}>
@@ -191,7 +189,7 @@ export const PokemonSquad = () => {
                     <Typography sx={{ color: '#f5f5dc' }}>
                       {pokemon.moves}<br />
                     </Typography>
-                    
+
                 {/* Ensure EditPokemonMoves is rendered with the current iterated pokemon */}
                 <EditPokemonMoves
                   pokemon={pokemon}

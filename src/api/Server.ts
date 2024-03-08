@@ -1,3 +1,3 @@
-import { getAuth } from "firebase/auth";
+// import { getAuth } from "firebase/auth";
 
-let user_id = localStorage.getItem('uuid')
+// let user_id = localStorage.getItem('uuid')

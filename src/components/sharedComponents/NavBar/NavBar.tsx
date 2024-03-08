@@ -29,7 +29,6 @@ import { signOut, getAuth } from 'firebase/auth';
 
 //internal imports
 import { theme } from '../../../Theme/themes'; 
-import { TroubleshootTwoTone, TurnedInNotOutlined } from '@mui/icons-material';
 
 
 // building a CSS object/dictionary to reference inside our html for styling
