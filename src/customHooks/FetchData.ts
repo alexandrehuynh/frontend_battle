@@ -27,11 +27,7 @@ export interface PokemonProps {
   // Optional: If you want to keep sprites for additional flexibility
   isShiny: boolean;
   firebaseKey?: string; // Assuming this is for some Firebase integration
+  battleReady?: boolean
 }
   
-
-interface GetPokemonDataProps {
-    PokemonData: PokemonProps[]
-    getData: () => void
-}
 

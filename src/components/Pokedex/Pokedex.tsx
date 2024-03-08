@@ -31,6 +31,7 @@ import { MessageType } from '../Auth';
 import { PokemonProps } from '../../customHooks/FetchData';
 import { MaterialUISwitch } from '../../Theme/themes';
 import wildImage from '../../assets/images/wild.jpg'; 
+import { multiFactor } from 'firebase/auth';
 
 // creating our Shop CSS style object 
 export const PokedexStyles = {
@@ -271,8 +272,8 @@ export const Pokedex = () => {
     };
   
     const handleAddToTeam = async (pokemon: PokemonProps & { isShiny: boolean }) => {
-        const userId = localStorage.getItem('uuid');
-        const teamRef = ref(getDatabase(), `teams/${userId}/`);
+        const user_id = localStorage.getItem('uuid');
+        const teamRef = ref(getDatabase(), `world/${user_id}/team/`);
       
         try {
           await push(teamRef, {
@@ -280,10 +281,10 @@ export const Pokedex = () => {
             // Save the image based on the isShiny status
             image_url: pokemon.isShiny ? pokemon.shiny_image_url : pokemon.image_url
           });
-          setSnackbarMessage(`Successfully added ${pokemon.pokemon_name} to your team`);
+          setSnackbarMessage(`Successfully caught and added ${pokemon.pokemon_name} to the team `);
           setSnackbarSeverity('success');
         } catch (error) {
-          setSnackbarMessage('Failed to add Pokémon to the team.');
+          setSnackbarMessage('Failed to catch Pokémon.');
           setSnackbarSeverity('error');
         }
         setOpenSnackbar(true);

@@ -28,11 +28,11 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'isLoggedIn'
     backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5)), url(${isLoggedIn ? afterHomeImage : beforeHomeImage})`,
     width: '100%',
     height: '100%',
-    backgroundSize: 'cover',
+    backgroundSize: '100% 100%',
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center bottom -81px',
+    backgroundPosition: 'center bottom -24px',
     position: 'absolute',
-    marginTop: '10px'
+    // marginTop: '10px'
   }));
   
   const MainText = styled('div')({

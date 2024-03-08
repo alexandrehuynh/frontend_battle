@@ -60,7 +60,8 @@ const navStyles = {
         flexShrink: 0
     },
     drawerPaper: {
-        width: drawerWidth
+        width: drawerWidth,
+        backgroundColor: '#f5f5dc'
     },
     drawerHeader: {
         display: 'flex',
@@ -185,11 +186,14 @@ export const NavBar = () => {
                     </Stack>
             </AppBar>
             <Drawer
-                sx={ open ? navStyles.drawer : navStyles.hide }
-                variant = 'persistent'
-                anchor = 'left' 
-                open = {open} //either true or false 
-            >
+                    sx={{
+                        ...open ? navStyles.drawer : navStyles.hide,
+                        '& .MuiDrawer-paper': navStyles.drawerPaper, // Add this line
+                    }}
+                    variant="persistent"
+                    anchor="left"
+                    open={open}
+                    >
                 <Box sx = {navStyles.drawerHeader }>
                     <IconButton onClick={handleDrawerClose}>
                         <CatchingPokemonIcon sx={{ transform: 'rotate(180deg)'}} />
