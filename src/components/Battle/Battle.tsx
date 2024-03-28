@@ -2,11 +2,13 @@ import _React, { useState, useEffect } from 'react';
 import { Box, Typography, Grid, Snackbar, Alert } from '@mui/material';
 import { getDatabase, ref, onValue, off } from 'firebase/database';
 
+
 import { NavBar } from '../sharedComponents';
 import { theme } from '../../Theme/themes';
-import { PokemonWithKey } from '../sharedComponents/PokemonCard'; // Adjust the import path as needed
+import { PokemonWithKey } from '../sharedComponents/PokemonCard'; 
 import { PokedexStyles } from '../Pokedex';
-import { PokemonCard } from '../sharedComponents/PokemonCard'; // Adjust the import path as needed
+import { PokemonCard } from '../sharedComponents/PokemonCard'; 
+
 
 export const Battle = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -34,12 +36,6 @@ export const Battle = () => {
     return () => off(teamRef);
   }, []);
 
-  // Stub function for toggleBattleStatus to satisfy the PokemonCard props
-  const toggleBattleStatus = (pokemon: PokemonWithKey) => {
-    console.log(`Toggling battle status for ${pokemon.pokemon_name}`);
-    // Implementation would go here
-  };
-
   return (
     <Box sx={PokedexStyles.main}>
       <NavBar />
@@ -51,8 +47,8 @@ export const Battle = () => {
           <PokemonCard
             key={pokemon.firebaseKey}
             pokemon={pokemon}
-            toggleBattleStatus={toggleBattleStatus}
-            releasePokemon={() => {}} // Empty function since we don't want to release from this page
+            showBattleButton={false} // Prop to hide battle status button
+            showDischargeButton={false} // Prop to hide discharge button
           />
         ))}
       </Grid>
