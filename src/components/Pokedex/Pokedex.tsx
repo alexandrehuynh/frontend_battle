@@ -173,7 +173,7 @@ export const CatchPokemonForm: React.FC<CatchPokemonFormProps> = ({ onPokemonCap
         <>
           <Box component="form" onSubmit={handleSubmit} sx={{ ...PokedexStyles.stack, flexDirection: 'row', alignItems: 'flex-end', gap: 2 }}>
             <Typography component="label" htmlFor="pokemonName" sx={{ color: '#f5f5dc', paddingTop: '10px',fontSize: '1rem', mr: 1.5, fontWeight: 'bold' }}>
-              Enter Pokémon Name:
+              Enter Pokémon Name or Number:
             </Typography>
             <input
               id="pokemonName"
