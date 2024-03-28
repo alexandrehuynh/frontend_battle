@@ -18,7 +18,6 @@ import { getDatabase, ref, onValue, off, remove, update } from 'firebase/databas
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemonRounded';
 import { GiDropWeapon } from "react-icons/gi";
 import { GiBattleGear } from "react-icons/gi";
-// import { ReactComponent as BattleReadyIcon } from '../../assets/images/boxing-gloves.svg';
 
 // internal imports
 import { NavBar } from '../sharedComponents';
@@ -36,12 +35,6 @@ export interface PokemonWithKey extends PokemonProps {
   firebaseKey: string;
 }
 
-// interface EditPokemonMovesProps {
-//   pokemon: PokemonWithKey | null; // Allow for null
-//   firebaseKey: string;
-//   userId: string | null; // Allow for null
-// }
-
 
 export const PokemonSquad = () => {
   const db = getDatabase();
@@ -50,8 +43,7 @@ export const PokemonSquad = () => {
   const [messageType, setMessageType] = useState<MessageType>('success');
   const [battleReady, setBattleReady] = useState<{ [key: string]: boolean }>({}); // Include the firebase key (team of 6)
   const [pokemonTeam, setPokemonTeam] = useState<PokemonWithKey[]>([]); // Include the firebase key (whole collection)
-  // const [selectedPokemonForEdit, setSelectedPokemonForEdit] = useState<PokemonWithKey | null>(null);    // State to control the selected Pokemon for editing moves
-  // const [isDialogOpen, setIsDialogOpen] = useState(false); // New state to control dialog visibility
+
 
 
   // Retrieve user_id from localStorage and ensure it is not null

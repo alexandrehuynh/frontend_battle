@@ -26,7 +26,7 @@ export interface PokemonProps {
   user_id?: string;
   // Optional: If you want to keep sprites for additional flexibility
   isShiny: boolean;
-  firebaseKey?: string; // Assuming this is for some Firebase integration
+  firebaseKey?: string | null; // Assuming this is for some Firebase integration
   battleReady?: boolean
 }
   
