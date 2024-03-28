@@ -65,7 +65,8 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({
               <Typography sx={{ 
                 color: '#f5f5dc', 
                 wordBreak: 'break-word', // Breaks long words to prevent overflow
-                overflowWrap: 'break-word', // Allows unbreakable words to be broken
+                overflowWrap: 'break-word', // Allows unbreakable words to be broken,
+                fontSize: '.75rem'
               }}>
                 Pokedex #: {pokemon.pokemon_id}<br />
                 Type: {pokemon.type}<br />
@@ -78,7 +79,12 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({
               <Typography>Stats</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography sx={{ color: '#f5f5dc' }}>
+            <Typography sx={{ 
+                color: '#f5f5dc', 
+                wordBreak: 'break-word', // Breaks long words to prevent overflow
+                overflowWrap: 'break-word', // Allows unbreakable words to be broken
+                fontSize: '.75rem'
+              }}>                
                 HP: {pokemon.hp}<br />
                 Attack: {pokemon.attack}<br />
                 Defense: {pokemon.defense}<br />
@@ -93,8 +99,13 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({
               <Typography>Moves</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography sx={{ color: '#f5f5dc' }}>
-                {pokemon.moves}
+            <Typography sx={{ 
+                color: '#f5f5dc', 
+                wordBreak: 'break-word', // Breaks long words to prevent overflow
+                overflowWrap: 'break-word', // Allows unbreakable words to be broken
+                fontSize: '.75rem'
+              }}>                
+              {pokemon.moves}
               </Typography>
             </AccordionDetails>
           </Accordion>

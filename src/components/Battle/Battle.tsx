@@ -42,6 +42,9 @@ export const Battle = () => {
       <Typography variant="h4" sx={{ ...PokedexStyles.header, marginTop: theme.spacing(10) }}>
         Battle Arena
       </Typography>
+      <Typography variant="h6" sx={{ ...PokedexStyles.header, marginTop: theme.spacing(1), textAlign: 'center', color: 'maroon' }}>
+        Your Team of Six Champions
+      </Typography>
       <Grid container spacing={3} sx={PokedexStyles.grid}>
         {battleReadyPokemons.map((pokemon) => (
           <PokemonCard
